@@ -1,0 +1,14 @@
+{
+  "name": "node.js.webapplication",
+  "description": "",
+  "main": "server.js",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
