@@ -8,7 +8,7 @@ const app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 app.locals.basedir = path.join(__dirname, 'views');
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'bower_components')));
 /*Конвеер обработки http запросов*/
 app.use('/', index_1.default);
 //если запрос по конвееру дошёл до сюда, значит запрашиваемая страница или файл или что-то ещё не найдено

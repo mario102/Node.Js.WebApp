@@ -2,7 +2,11 @@ doctype html
 html
   head
     title= title
+    <meta charset="utf-8"/>
+    <link rel='stylesheet' href='/bootstrap/dist/css/bootstrap.css' />
   body
     include /partials/menu.pug
     block content
     include /partials/footer.pug
+    <script src="/jquery/dist/jquery.js"></script>
+    <script src="/bootstrap/dist/js/bootstrap.js"></script>
