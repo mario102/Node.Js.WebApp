@@ -1,5 +1,6 @@
 import express = require('express');
 import path = require('path');
+import favicon = require('serve-favicon');
 import index from './routes/index';
 
 const app = express();
@@ -9,6 +10,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 app.locals.basedir = path.join(__dirname, 'views');
 app.use(express.static(path.join(__dirname,'bower_components')));
+app.use(favicon(__dirname + '/favicon.ico'));
 
 /*Конвеер обработки http запросов*/
 app.use('/', index);

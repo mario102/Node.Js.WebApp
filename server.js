@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const path = require("path");
+const favicon = require("serve-favicon");
 const index_1 = require("./routes/index");
 const app = express();
 /*Настройка сервера*/
@@ -9,6 +10,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 app.locals.basedir = path.join(__dirname, 'views');
 app.use(express.static(path.join(__dirname, 'bower_components')));
+app.use(favicon(__dirname + '/favicon.ico'));
 /*Конвеер обработки http запросов*/
 app.use('/', index_1.default);
 //если запрос по конвееру дошёл до сюда, значит запрашиваемая страница или файл или что-то ещё не найдено

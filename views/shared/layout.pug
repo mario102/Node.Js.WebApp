@@ -6,7 +6,11 @@ html
     <link rel='stylesheet' href='/bootstrap/dist/css/bootstrap.css' />
   body
     include /partials/menu.pug
-    block content
+    <div class="container-fluid">
+      <main>
+      block content
+      </main>
+    </div>
     include /partials/footer.pug
-    <script src="/jquery/dist/jquery.js"></script>
-    <script src="/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/jquery/dist/jquery.min.js"></script>
+    <script src="/bootstrap/dist/js/bootstrap.bundle.js"></script>
