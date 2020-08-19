@@ -9,8 +9,20 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <div class="navbar-nav nav-pills">
-                    <a class="nav-link" href="/">Главная</a> 
-                    <a class="nav-link" href="/discription">Описание</a>
+                    - if(path == "/"){
+                        <a class="nav-link active" href="/">Главная</a> 
+                    - }
+                    - else{
+                        <a class="nav-link" href="/">Главная</a> 
+                    - }
+                    
+                    - if(path == "/discription"){
+                        <a class="nav-link active" href="/discription">Описание</a>
+                    - }
+                    - else{
+                        <a class="nav-link" href="/discription">Описание</a>
+                    - }
+                    
                 </div>
             </div>
         </div>
