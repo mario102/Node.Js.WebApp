@@ -4,11 +4,13 @@ html
     title= title
     <meta charset="utf-8"/>
     <link rel='stylesheet' href='/bootstrap/dist/css/bootstrap.css' />
+    <link rel='stylesheet' href='/styles/site.css'/>
   body
     include /partials/menu.pug
     <div class="container-fluid">
+      <!-- main не трогать -->
       <main>
-        <div id="maincontent" style="position: relative;">
+        <div id="maincontent" style="position: relative;" class="pb-3">
           block content
         </div>
       </main>

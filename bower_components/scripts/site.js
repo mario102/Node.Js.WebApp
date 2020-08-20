@@ -10,11 +10,11 @@ $(document).ready( function(){
         $(oldlink).removeClass("active");
         $(newlink).addClass("active");
 
-        if(newlink.offsetLeft < oldlink.offsetLeft){
+        if(newlink.offsetLeft < oldlink.offsetLeft || newlink.offsetTop < oldlink.offsetTop){
           $("div#maincontent").animate({"left": "+=100%"}, "slow", function(){
             LoadAsync(adress, "right");
           });
-        }else if (newlink.offsetLeft > oldlink.offsetLeft){
+        }else if (newlink.offsetLeft > oldlink.offsetLeft || newlink.offsetTop > oldlink.offsetTop){
           $("div#maincontent").animate({"left": "-=100%"}, "slow", function(){
             LoadAsync(adress, "left");
           });
@@ -43,12 +43,11 @@ function LoadAsync(url, way){
       /*Подставляем основной контент в main*/
       $("main").html(main);
       
-      
-      if(way == "right"){
+      if(way == "right"){//анимация слайда слева направо
         $("div#maincontent").css("left","-100%");//прячем контент слева
         $("div#maincontent").animate({"left": "+=100%"}, "slow");
       }
-      if(way == "left"){
+      if(way == "left"){//анимация слайда справа налево
         $("div#maincontent").css("left","+100%");//прячем контент справа
         $("div#maincontent").animate({"left": "-=100%"}, "slow");
       }
