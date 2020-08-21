@@ -22,6 +22,7 @@ $(document).ready( function(){
 
         oldlink = newlink;
     });
+    CheckChat();
 });
 function LoadAsync(url, way){
   $.get(url, function(res, status, xhr){
@@ -52,5 +53,21 @@ function LoadAsync(url, way){
         $("div#maincontent").animate({"left": "-=100%"}, "slow");
       }
       history.pushState(null, titleValue, url);
+      CheckChat();
   })
+}
+
+function CheckChat(){
+  if($('ul#messageList')){
+    $('input#sendButton').click( function(event){
+      let message = document.getElementById("messageInput").value;
+      $.post("/chat", {Message: message}, function(res, status, xhr){
+        if(status != "success"){
+          let msg = "Извините, но произошла ошибка: ";
+          $("main").html(msg + xhr.status + " " + xhr.statusText);
+        }
+        $("ul#messagesList").append("<li>" + res + "</li>");
+      });
+    });
+  }
 }

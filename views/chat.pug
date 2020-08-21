@@ -1,0 +1,31 @@
+extends shared/layout
+
+block content
+    <div class="row">&nbsp;</div>
+    <div class="row">
+        <div class="col-1">Сообщение</div>
+    </div>
+    <div class="row">
+        <div class="w-auto pr-3 pl-3"><textarea type="text" id="messageInput"></textarea></div>
+        <div class="col-auto ml-3 mt-2" style="background-color: #6e7d8c3b; border-radius: 15px;">
+                <p>Люди в чате:</p>
+                <ul id="Users" class="messagesList" style="padding-left: 0;">
+                </ul>
+        </div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <div class="row">
+            <div class="col-6">
+                <input type="button" id="sendButton" value="Отправить сообщение" />
+            </div>
+    </div>
+    <div class="row">    
+        <hr />  
+    </div>
+    <div class="row border-top">
+        <div class="col-auto mt-2">
+            <ul id="messagesList" class="messagesList">
+                
+            </ul>
+        </div>
+    </div>
