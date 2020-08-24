@@ -1,9 +1,13 @@
+import * as http from 'http';
 import express = require('express');
 import path = require('path');
 import favicon = require('serve-favicon');
 import index from './routes/index';
+import WebSocket = require('ws');
 
 const app = express();
+const server = http.createServer(app);
+const wsServer = new WebSocket.Server({ server: server, clientTracking: true });
 
 /*Настройка сервера*/
 app.set('views', path.join(__dirname, 'views'));
@@ -11,6 +15,21 @@ app.set('view engine', 'pug');
 app.locals.basedir = path.join(__dirname, 'views');
 app.use(express.static(path.join(__dirname,'bower_components')));
 app.use(favicon(__dirname + '/favicon.ico'));
+
+/*Запуск ws сервера*/
+wsServer.on('connection', function connection(ws, req){
+    console.log("К вебсокет серверу подключился клиент");
+    ws.on('message', function recived(data){
+        wsServer.clients.forEach(function each(client){
+            if(client.readyState === WebSocket.OPEN){
+                client.send(data);
+            }
+        });
+    });
+    ws.on('close', (code, reason)=>{
+        console.log('Клиент закрыл соединение с webSocket сервером с кодом: ' + code + ' по причине: ' + reason);
+    });
+});
 
 /*Конвеер обработки http запросов*/
 app.use('/', index);
@@ -43,6 +62,7 @@ app.use(function (err, req, res, next) {//иначе просто выводим
 /*Конец конвеера*/
 
 app.set('port', 3000);
-let server = app.listen(app.get('port'), ()=>{
-    console.debug('Запускаем сервер на прослушивание на порту ' + app.get('port').toString());
-})
+
+server.listen(app.get('port'), () => {
+    console.debug('Сервер запустился на прослушивание на порту ' + app.get('port'));
+});

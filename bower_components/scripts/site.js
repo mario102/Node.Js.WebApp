@@ -1,28 +1,45 @@
 'use strict';
 $(document).ready( function(){
     let oldlink = $("nav a.active")[0];//переменная в которой лежит html элемент с которого нужно убрать класс active
+    let url = new URL(window.location.href);
+    let chat = new Chat();
+    if(url.pathname == "/chat"){//при изначальной загрузке страницы, если это страничка с чатом запускаем соединение с webSocket
+      chat.OpenChat();
+    }
 
     $("nav a.nav-link").click( function(event){
         event.preventDefault();
         let newlink = this;//переменная в которой лежит html элемент которому нужно добавить класс active
         let adress = this.href;
+        let acticveUrl = new URL(adress);
         
         $(oldlink).removeClass("active");
         $(newlink).addClass("active");
 
         if(newlink.offsetLeft < oldlink.offsetLeft || newlink.offsetTop < oldlink.offsetTop){
+          if(acticveUrl.pathname == "/chat"){
+            console.log("Открываем соединение");
+            chat.OpenChat();//если мы переходим на страничку с чатом, запускаем соединение с чатом
+          }else if(window.location.pathname == "/chat"){
+            chat.CloseChat();//если переходим на какую-то другую страничку, с чата, то закрываем соединение
+          }
           $("div#maincontent").animate({"left": "+=100%"}, "slow", function(){
             LoadAsync(adress, "right");
           });
         }else if (newlink.offsetLeft > oldlink.offsetLeft || newlink.offsetTop > oldlink.offsetTop){
+          if(acticveUrl.pathname == "/chat"){
+            console.log("Открываем соединение");
+            chat.OpenChat();//если мы переходим на страничку с чатом, запускаем соединение с чатом
+          }else if(window.location.pathname == "/chat"){
+            chat.CloseChat();//если переходим на какую-то другую страничку, с чата, то закрываем соединение
+          }
           $("div#maincontent").animate({"left": "-=100%"}, "slow", function(){
             LoadAsync(adress, "left");
           });
         }
-
+        
         oldlink = newlink;
     });
-    CheckChat();
 });
 function LoadAsync(url, way){
   $.get(url, function(res, status, xhr){
@@ -53,21 +70,5 @@ function LoadAsync(url, way){
         $("div#maincontent").animate({"left": "-=100%"}, "slow");
       }
       history.pushState(null, titleValue, url);
-      CheckChat();
   })
-}
-
-function CheckChat(){
-  if($('ul#messageList')){
-    $('input#sendButton').click( function(event){
-      let message = document.getElementById("messageInput").value;
-      $.post("/chat", {Message: message}, function(res, status, xhr){
-        if(status != "success"){
-          let msg = "Извините, но произошла ошибка: ";
-          $("main").html(msg + xhr.status + " " + xhr.statusText);
-        }
-        $("ul#messagesList").append("<li>" + res + "</li>");
-      });
-    });
-  }
 }

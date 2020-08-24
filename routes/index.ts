@@ -12,10 +12,5 @@ router.get('/discription', (req, res) =>{
 router.get('/chat', (req, res) =>{
     res.render('chat', {title: 'Чат', path: '/chat'});
 });
-router.post('/chat', urlEncodedParser, (req, res) =>{
-    if(!req.body) return res.sendStatus(400);
-    console.log(req.body);
-    res.send(req.body.Message);
-});
 
 export default router;
