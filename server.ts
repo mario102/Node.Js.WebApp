@@ -4,10 +4,17 @@ import path = require('path');
 import favicon = require('serve-favicon');
 import index from './routes/index';
 import WebSocket = require('ws');
+import * as mysql from 'mysql';
 
 const app = express();
 const server = http.createServer(app);
 const wsServer = new WebSocket.Server({ server: server, clientTracking: true });
+const connectionToMysql = mysql.createConnection({
+    host: "localhost",
+    user: "test",
+    database: "nodejsdatabase",
+    password: "test"
+})
 
 /*Настройка сервера*/
 app.set('views', path.join(__dirname, 'views'));

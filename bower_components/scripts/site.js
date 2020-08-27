@@ -11,37 +11,31 @@ $(document).ready( function(){
         event.preventDefault();
         let newlink = this;//переменная в которой лежит html элемент которому нужно добавить класс active
         let adress = this.href;
-        let acticveUrl = new URL(adress);
+        
         
         $(oldlink).removeClass("active");
         $(newlink).addClass("active");
 
         if(newlink.offsetLeft < oldlink.offsetLeft || newlink.offsetTop < oldlink.offsetTop){
-          if(acticveUrl.pathname == "/chat"){
-            console.log("Открываем соединение");
-            chat.OpenChat();//если мы переходим на страничку с чатом, запускаем соединение с чатом
-          }else if(window.location.pathname == "/chat"){
+          if(window.location.pathname == "/chat"){
             chat.CloseChat();//если переходим на какую-то другую страничку, с чата, то закрываем соединение
           }
           $("div#maincontent").animate({"left": "+=100%"}, "slow", function(){
-            LoadAsync(adress, "right");
+            LoadAsync(adress, "right", chat);
           });
         }else if (newlink.offsetLeft > oldlink.offsetLeft || newlink.offsetTop > oldlink.offsetTop){
-          if(acticveUrl.pathname == "/chat"){
-            console.log("Открываем соединение");
-            chat.OpenChat();//если мы переходим на страничку с чатом, запускаем соединение с чатом
-          }else if(window.location.pathname == "/chat"){
+          if(window.location.pathname == "/chat"){
             chat.CloseChat();//если переходим на какую-то другую страничку, с чата, то закрываем соединение
           }
           $("div#maincontent").animate({"left": "-=100%"}, "slow", function(){
-            LoadAsync(adress, "left");
+            LoadAsync(adress, "left", chat);
           });
         }
         
         oldlink = newlink;
     });
 });
-function LoadAsync(url, way){
+function LoadAsync(url, way, chat){
   $.get(url, function(res, status, xhr){
       if(status != "success"){
         let msg = "Извините, но произошла ошибка: ";
@@ -70,5 +64,9 @@ function LoadAsync(url, way){
         $("div#maincontent").animate({"left": "-=100%"}, "slow");
       }
       history.pushState(null, titleValue, url);
+      let ChatURL = new URL(url);
+      if(ChatURL.pathname == "/chat"){
+        chat.OpenChat();//если загруженная страница является чатом, открываем соединение с websocket
+      }
   })
 }
