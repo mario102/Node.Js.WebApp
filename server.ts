@@ -4,17 +4,25 @@ import path = require('path');
 import favicon = require('serve-favicon');
 import index from './routes/index';
 import WebSocket = require('ws');
-import * as mysql from 'mysql';
+import {
+    Sequelize,
+    Model,
+    ModelDefined,
+    DataTypes,
+    HasManyGetAssociationsMixin,
+    HasManyAddAssociationMixin,
+    HasManyHasAssociationMixin,
+    Association,
+    HasManyCountAssociationsMixin,
+    HasManyCreateAssociationMixin,
+    Optional,
+  } from "sequelize";
+
 
 const app = express();
 const server = http.createServer(app);
 const wsServer = new WebSocket.Server({ server: server, clientTracking: true });
-const connectionToMysql = mysql.createConnection({
-    host: "localhost",
-    user: "test",
-    database: "nodejsdatabase",
-    password: "test"
-})
+const sequelize = new Sequelize("mysql://test:test@localhost:3306/nodejsdatabase");
 
 /*Настройка сервера*/
 app.set('views', path.join(__dirname, 'views'));
@@ -23,7 +31,7 @@ app.locals.basedir = path.join(__dirname, 'views');
 app.use(express.static(path.join(__dirname,'bower_components')));
 app.use(favicon(__dirname + '/favicon.ico'));
 
-/*Запуск ws сервера*/
+/*Вешаем обработчик на событие "connection" ws сервера*/
 wsServer.on('connection', function connection(ws, req){
     console.log("К вебсокет серверу подключился клиент");
     ws.on('message', function recived(data){
@@ -37,6 +45,13 @@ wsServer.on('connection', function connection(ws, req){
         console.log('Клиент закрыл соединение с webSocket сервером с кодом: ' + code + ' по причине: ' + reason);
     });
 });
+
+try {
+    sequelize.authenticate();
+    console.log('Соединение успешно установлено');
+  } catch (error) {
+    console.error('Соединение не установлено по причине: ', error);
+  }
 
 /*Конвеер обработки http запросов*/
 app.use('/', index);

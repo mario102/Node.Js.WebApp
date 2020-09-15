@@ -8,7 +8,7 @@
 				"$tsc-watch"
 			],
 			"group": "build",
-			"label": "npm: build",
+			"label": "build",
 			"detail": "tsc --build",
 			"isBackground": true
 		}

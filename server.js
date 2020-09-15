@@ -6,16 +6,18 @@ const path = require("path");
 const favicon = require("serve-favicon");
 const index_1 = require("./routes/index");
 const WebSocket = require("ws");
+const sequelize_1 = require("sequelize");
 const app = express();
 const server = http.createServer(app);
 const wsServer = new WebSocket.Server({ server: server, clientTracking: true });
+const sequelize = new sequelize_1.Sequelize("mysql://test:test@localhost:3306/nodejsdatabase");
 /*Настройка сервера*/
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 app.locals.basedir = path.join(__dirname, 'views');
 app.use(express.static(path.join(__dirname, 'bower_components')));
 app.use(favicon(__dirname + '/favicon.ico'));
-/*Запуск ws сервера*/
+/*Вешаем обработчик на событие "connection" ws сервера*/
 wsServer.on('connection', function connection(ws, req) {
     console.log("К вебсокет серверу подключился клиент");
     ws.on('message', function recived(data) {
@@ -29,6 +31,13 @@ wsServer.on('connection', function connection(ws, req) {
         console.log('Клиент закрыл соединение с webSocket сервером с кодом: ' + code + ' по причине: ' + reason);
     });
 });
+try {
+    sequelize.authenticate();
+    console.log('Соединение успешно установлено');
+}
+catch (error) {
+    console.error('Соединение не установлено по причине: ', error);
+}
 /*Конвеер обработки http запросов*/
 app.use('/', index_1.default);
 //если запрос по конвееру дошёл до сюда, значит запрашиваемая страница или файл или что-то ещё не найдено
